@@ -1,0 +1,11 @@
+package com.userInfo;
+
+import com.search.exceptions.BusinessException;
+
+public interface UserDAO {
+
+	public UserInfoAccount registerNewUserInfo(UserInfoAccount newUser) throws BusinessException;
+	public UserInfoAccount getUserByUserNamePass(String userName,String password);
+
+
+}

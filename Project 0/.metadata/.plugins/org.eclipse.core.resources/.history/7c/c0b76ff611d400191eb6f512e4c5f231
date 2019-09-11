@@ -1,0 +1,12 @@
+package com.revaturebank.service;
+
+
+
+public interface CheckValidation {
+	
+	public boolean checkUserName(String str);
+	public boolean checkDipWidChkSav(Double num);
+	public boolean checkNoNum(String str);
+
+
+}

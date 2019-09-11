@@ -1,0 +1,13 @@
+package com.revaturebank.service;
+
+import com.revaturebank.model.UserInfoAccount;
+
+public interface CheckValidation {
+	
+	public boolean checkUserName(String str);
+	public boolean checkDipWidChkSav(Double num);
+	public boolean checkNoNum(String str);
+	public UserInfoAccount validUserInfo()
+
+
+}

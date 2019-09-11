@@ -1,0 +1,329 @@
+package com.revaturebank.main;
+
+import java.util.Scanner;
+
+import org.apache.log4j.Logger;
+
+import com.revaturebank.dao.impl.LoginPassDAOImpl;
+import com.revaturebank.dao.impl.SavCheckDAOImpl;
+import com.revaturebank.dao.impl.UserAccountDaoImpl;
+import com.revaturebank.dao.impl.UserInfoDaolmpl;
+import com.revaturebank.exceptions.BusinessException;
+import com.revaturebank.model.UserAccount;
+import com.revaturebank.model.UserInfoAccount;
+import com.revaturebank.service.impl.ValidClass;
+
+public class DispClass {
+
+	private static final Logger log = Logger.getLogger(DispClass.class);
+
+	public static void main(String[] args)  {
+		// TODO Auto-generated method stub
+
+		Scanner sc = new Scanner(System.in);
+		
+		UserAccountDaoImpl uadi = new  UserAccountDaoImpl();
+		UserInfoDaolmpl uidi = new UserInfoDaolmpl();
+		LoginPassDAOImpl lpdao = new LoginPassDAOImpl();
+		SavCheckDAOImpl svdi = new SavCheckDAOImpl();
+		ValidClass valCk = new ValidClass();
+		Disp1 dis = new Disp1();
+		//UserAccount newUser = null;
+		UserInfoAccount existUser = null;
+		UserAccount existAUser = null;
+		
+		
+		
+		int backVar = 0;
+		boolean check = false;
+		boolean loginCheck = false;
+		boolean registerCheck = false;
+		boolean check2 = false;
+		
+		int userChoice = 0;
+		
+		//This is 
+		
+		
+		
+		
+		do {
+			
+			if(userChoice == 0) {
+				dis.introDisp();
+				
+				if(sc.hasNextInt()) {
+					userChoice = sc.nextInt();
+				
+				}
+				else {
+					log.info("Invalid Entry Please Enter a Number");
+					//sc.nextLine();
+					log.info("    ");
+				}
+
+			}
+
+			
+			if(userChoice>0 && userChoice<=3) {
+				switch (userChoice) {
+			
+			
+				case 1: 
+					int userLogin = 0;
+					String userNameL = null;
+					String passWordL = null;
+					
+
+					if(userLogin == 0) {	
+						dis.loginDisp();
+						
+						if(sc.hasNextInt()) {
+							userLogin = sc.nextInt();
+							//userLogin =sc.next();
+						}
+						else {
+							log.info("Please Enter a Number");
+							sc.nextLine();
+							log.info("    ");
+						}
+					}
+					switch(userLogin) {
+					case 1 :
+						boolean ck = false;
+						do {
+						log.info("Please Enter Your UserName that is more than 4 charecters");
+						userNameL = sc.next();
+						
+							if(valCk.checkUserName(userNameL)) {
+								ck = true;}
+							else {
+								log.info("Please insert A Valid UserName");
+							}
+						
+						}while(ck==false);
+						
+						log.info("Please Enter Your Password that is more than 4 charecters");
+						passWordL = sc.next();
+						
+						try {
+							if(lpdao.loginCheck(userNameL, passWordL) != null) {
+								existUser = lpdao.loginCheck(userNameL, passWordL); 
+							
+								if(lpdao.loginAccountCheck(existUser.getUserId()) != null){
+									existAUser = lpdao.loginAccountCheck(existUser.getUserId());
+									check =true;
+									loginCheck = true;
+								}
+								else {
+									throw new BusinessException("User ID not properly Passes");
+								}
+							
+							}
+							else {
+								throw new BusinessException("User Do not exist please Try again");
+							}
+							
+						}catch(Exception e1){
+							log.info(e1);
+						}
+						break;
+					case 2 : 
+						log.info("Going Back!!");
+						userChoice = 0;
+						break;
+					}
+					 
+						break;
+				case 2: 
+					int userRegister = 0;
+					String firstName =null;
+					String lastName = null;
+					String email =null;
+					String userName = null;
+					String passWord = null;
+					double deposit = 0;
+					double checkings = 0;
+					
+					
+					if(userRegister == 0) {
+						dis.registerDisp1();
+						if(sc.hasNextInt()) {
+						userRegister= sc.nextInt();
+						}else {
+							log.info("Please Enter a Number");
+							sc.nextLine();
+							log.info("    ");
+						}
+					}
+					if(userRegister == 1) {
+						try {
+							log.info("Please Insert your First Name");
+								 firstName = sc.next();
+								
+							log.info("Please Insert your Last Name");
+								 lastName = sc.next();
+						
+							log.info("Please Insert your Email");
+								 email = sc.next();
+								
+							log.info("Please Insert your UserName");
+							userName = sc.next();	
+							
+								valCk.checkUserNameReg(userName);
+							
+								 
+								
+							log.info("Please Insert Your Password");
+								
+								 passWord = sc.next();
+								
+							log.info("Please Insert Your Inital Savings Diposit");
+								 deposit = sc.nextDouble();
+								
+							log.info("Please Insert Your Initial Checkings Diposit");
+								 checkings = sc.nextDouble();
+						
+						
+						
+								 UserInfoAccount userInfoAcc = new UserInfoAccount(firstName ,lastName,email,userName,passWord,deposit,checkings);
+								 UserInfoAccount srvlayer = valCk.validUserInfo(userInfoAcc);
+								 int userID = srvlayer.getUserId();
+								 UserAccount userAcc = new UserAccount(deposit,checkings,userID);
+								 UserAccount neUserAcc = valCk.validUserAcc(userAcc);
+								 userChoice = 0;
+						}
+								
+					catch(BusinessException e) {
+							log.info(e.getMessage());
+						};
+					}
+					else if(userRegister == 2) {
+						log.info("Going Back");
+						userRegister = 8;
+						userChoice = 0;
+					}
+					
+
+					break;
+				case 3:
+					log.info("Goodbye!!!!");
+					check = true;
+					break;
+				
+				}
+			}
+			else {
+				log.info("Please Enter a Your Choice of Numeber From 1-3");
+			}
+			
+			
+		}while( check == false);
+		
+		
+		
+		//This is the Second Do loop for the Bank Information display
+		
+
+		
+		
+		
+		if(loginCheck == true ) {
+			
+			int userBankChoice = 0;
+			int mainUserID = existUser.getUserId();
+			boolean dipMoney = false;
+			boolean widMoney = false;
+			boolean showTrans = false;
+			
+			do {// Loop 3
+
+				
+				dis.backDisp(existUser.getFirstName(),existUser.getLastName(),existAUser.getUserAccoNum(), existAUser.getCheckStat() ,existAUser.getDepositStat());		
+
+				
+				
+				
+				userBankChoice = sc.nextInt();
+				
+				if(userBankChoice > 0 && userBankChoice<=6) {
+					
+					
+					switch(userBankChoice) {
+					case 1: 
+						log.info("Please Enter The amount you want to Deposit Checkings:");
+						double dipAm1 = sc.nextDouble();
+						
+						try {
+							svdi.dipCheckings(existAUser.getCheckStat() ,dipAm1, existUser.getUserId());
+							existAUser = uadi.getAllUserAccount(existUser.getUserId());
+						} catch (Exception e) {
+							// TODO Auto-generated catch block
+							log.info(e);
+						}
+						
+					
+						break;
+					case 2:
+						log.info("Please Enter The amount you want to Deposit Savings:");
+						double dipAm2 = sc.nextDouble();
+						try {
+							svdi.dipSavings(existAUser.getDepositStat() ,dipAm2, existUser.getUserId());
+							existAUser = uadi.getAllUserAccount(existUser.getUserId());
+						} catch (Exception e) {
+							// TODO Auto-generated catch block
+							log.info(e);
+						}
+						
+						
+						
+						break;
+					case 3: 
+						log.info("Please Enter The amount you want to Withdraw Checkings:");
+						double widAm1 = sc.nextDouble();
+						
+						try {
+							svdi.widCheckings(existAUser.getCheckStat() ,widAm1, existUser.getUserId());
+							existAUser = uadi.getAllUserAccount(existUser.getUserId());
+						} catch (Exception e) {
+							// TODO Auto-generated catch block
+							log.info(e);
+						}
+						
+						
+						break;
+					case 4:
+						log.info("Please Enter The amount you want to Withdraw Savings:");
+						double widAm2 = sc.nextDouble();
+						
+						try {
+							svdi.widSavings(existAUser.getDepositStat(), widAm2, existUser.getUserId());
+							existAUser = uadi.getAllUserAccount(existUser.getUserId());
+						} catch (Exception e) {
+							// TODO Auto-generated catch block
+							log.info(e);
+						}
+						
+						
+						break;
+					case 5: log.info("Working on it");
+						break;
+					case 6: log.info("Good Bye See You Again");
+						loginCheck = false;
+
+					}
+					
+				}
+				
+				
+				}while ( loginCheck==true || userBankChoice !=6);
+			
+		}
+			
+	
+		
+		
+	
+	}
+
+}

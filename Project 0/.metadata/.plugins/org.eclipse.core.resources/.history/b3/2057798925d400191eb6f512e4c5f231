@@ -1,0 +1,17 @@
+package com.revaturebank.service;
+
+import com.revaturebank.model.UserAccount;
+import com.revaturebank.model.UserInfoAccount;
+import com.revaturebank.exceptions.BusinessException;
+
+public interface CheckValidation {
+	
+	public boolean checkUserName(String str) ;
+	public boolean checkDipWidChkSav(Double num);
+	public boolean checkNoNum(String str);
+	public UserInfoAccount validUserInfo(UserInfoAccount newUser) throws BusinessException;
+	public boolean passVal(String pass);
+	public boolean checkUserNameReg(String str) throws BusinessException;
+	public UserAccount validUserInfo(UserAccount newAcc) throws BusinessException;
+
+}

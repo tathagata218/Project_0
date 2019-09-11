@@ -1,0 +1,80 @@
+package com.revaturebank.service.impl;
+
+import java.util.regex.Pattern;
+
+import com.revaturebank.model.UserInfoAccount;
+import com.revaturebank.service.CheckValidation;
+
+
+public class ValidClass implements CheckValidation {
+
+	@Override
+	public boolean checkUserName(String str)  {
+		boolean chk = false;
+		String rgx = "[a-zA-Z_0-9]{4,}";
+		Pattern pt = Pattern.compile(rgx);
+		
+		if(pt.matcher(str).matches()) {
+			chk = true;
+		}
+		return chk;
+	}
+
+
+	@Override
+	public boolean checkDipWidChkSav(Double num) {
+		boolean chk = false;
+		
+		if(num%1==0) {
+			chk = false;
+		}
+		else {
+			chk=true;
+		}
+		return chk;
+	}
+
+
+	@Override
+	public boolean checkNoNum(final String str) {
+		if( str == null || str.length() == 0) {
+			return false;
+		}
+		return str.chars().allMatch(Character::isDigit);
+	}
+
+
+	@Override
+	public UserInfoAccount validUserInfo(UserInfoAccount newUser) {
+		String fn = newUser.getFirstName();
+		String ln = newUser.getLastName();
+		String useName = newUser.getUserName();
+		String email = newUser.getUserEmail();
+		String pass = newUser.getPassWord();
+		Double savDip = newUser.getDeposit();
+		Double chkDip = newUser.getCheckings();
+		
+		
+		return null;
+	}
+
+
+	@Override
+	public boolean passVal( String pass) {
+		
+		boolean passChk = false;
+		String rgx = "[a-zA-Z0-9]{4,}";
+		Pattern pt = Pattern.compile(rgx);
+		
+		if(pt.matcher(pass).matches()) {
+			passChk = true;
+		}
+		return passChk;
+		
+		
+	
+	}
+	
+	
+
+}

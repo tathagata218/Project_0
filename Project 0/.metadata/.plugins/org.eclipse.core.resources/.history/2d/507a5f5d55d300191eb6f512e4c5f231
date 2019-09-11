@@ -1,0 +1,12 @@
+package com.revaturebank.dao;
+
+import com.revaturebank.exceptions.BusinessException;
+import com.userAccount.UserAccount;
+import com.userInfo.UserInfoAccount;
+
+public interface LoginPassDAO {
+	
+	public UserInfoAccount loginCheck(String userName, String password) throws BusinessException;
+	public UserAccount loginAccountCheck(int userId) throws BusinessException;
+
+}

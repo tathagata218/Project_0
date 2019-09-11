@@ -1,0 +1,88 @@
+package com.revaturebank.main;
+
+import java.io.UnsupportedEncodingException;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+
+import com.search.exceptions.BusinessException;
+import org.apache.log4j.Logger;
+
+
+public class CheckMethods {
+	
+	private static final Logger log = Logger.getLogger(DispClass.class);
+	
+	
+	
+	public String hashPass(String pass) throws BusinessException{
+		String hashOutput = null;
+		
+		try {
+			MessageDigest digest = MessageDigest.getInstance("MD5");
+			byte[] hashedBytes = digest.digest(pass.getBytes("UTF-8"));
+			StringBuffer sb = new StringBuffer();
+			for (int i = 0; i < hashedBytes.length; i++) {
+				sb.append(Integer.toString((hashedBytes[i] & 0xff) + 0x100, 16)
+		                .substring(1));
+				
+			}
+			hashOutput = sb.toString();
+			
+		}catch (NoSuchAlgorithmException | UnsupportedEncodingException ex) {
+			log.info("Some Thing is wrong with Hashing");
+		}
+		
+		return hashOutput;
+		
+	}
+	
+	public boolean checkHashPass(String pass1,String pass2) throws BusinessException{
+		
+		boolean result = false;
+		String has1 = null;
+		String has2 = null;
+		
+		if( pass1.length() == pass2.length()) {
+			try {
+				MessageDigest digest = MessageDigest.getInstance("MD5");
+				byte[] hashedBytes1 = digest.digest(pass1.getBytes("UTF-8"));
+				byte[] hashedBytes2 = digest.digest(pass2.getBytes("UTF-8"));
+				StringBuffer sb1 = new StringBuffer();
+				StringBuffer sb2 = new StringBuffer();
+				
+				for(int i=0; i< hashedBytes1.length;i++) {
+					
+					sb1.append(Integer.toString((hashedBytes1[i] & 0xff) + 0x100, 16)
+			                .substring(1));
+					sb2.append(Integer.toString((hashedBytes2[i] & 0xff) + 0x100, 16)
+			                .substring(1));
+				}
+				
+				has1 = sb1.toString();
+				has2 = sb1.toString();
+				
+				if(has1.equals(has2)) {
+					result = true;
+				}
+				else {
+					result = false;
+				}
+			
+			
+			}catch (NoSuchAlgorithmException | UnsupportedEncodingException ex) {
+				log.info("Something Went Wrong");
+			}
+		
+		}
+		else {
+			result = false;
+		}
+	
+		return result;
+	}
+
+	
+	
+
+
+}

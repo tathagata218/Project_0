@@ -1,0 +1,9 @@
+package com.userAccount;
+
+import com.revaturebank.exceptions.BusinessException;
+
+public interface UserAccountDAO {
+	
+	public UserAccount registerAccountInfo(UserAccount userAcc) throws BusinessException;
+	public UserAccount getAllUserAccount (int userId) throws BusinessException;
+}
